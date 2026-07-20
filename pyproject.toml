@@ -1,0 +1,48 @@
+# Roadie Python SDK (beta) — PEP 621 metadata, src/ layout.
+#
+# STANDALONE: this package is intentionally NOT part of the pnpm/turbo JS build
+# graph. pnpm only recognizes a workspace directory that contains a package.json;
+# this package has none, so `pnpm build/test/typecheck` never sees it.
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "roadie-sdk"
+version = "0.1.0b1"
+description = "Server-side Python SDK (beta) for the Roadie AI gateway — chat, embeddings, streaming, and client-token minting."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Roadie" }]
+keywords = ["roadie", "ai", "gateway", "llm", "embeddings", "sdk"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: Apache Software License",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Typing :: Typed",
+]
+# Zero required runtime dependencies — stdlib only (see README "Design notes").
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/roadie"]
+
+[tool.pytest.ini_options]
+# Tests import the package straight from src/ — no build/install step needed to
+# run `python -m pytest` from this directory.
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[project.urls]
+Homepage = "https://roadie.paroaria.ai"
+Documentation = "https://docs.roadie.paroaria.ai/sdks/python"
+Repository = "https://github.com/paroaria/roadie-python"
+Issues = "https://github.com/paroaria/roadie-python/issues"
