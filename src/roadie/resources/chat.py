@@ -1,4 +1,4 @@
-"""``bp.chat`` — the unified chat surface (plan §21.2).
+"""``roadie.chat`` — the unified chat surface.
 
 - :meth:`ChatResource.create` → non-streaming ``POST /v1/chat``, returns a typed
   :class:`~roadie.types.ChatResponse` (id, message, finish_reason, usage, cost,

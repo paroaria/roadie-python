@@ -1,9 +1,9 @@
-"""Wire types for the Roadie data-plane API (plan §21.2), as Python dataclasses.
+"""Wire types for the Roadie data-plane API, as Python dataclasses.
 
 Public request fields are snake_case, matching the gateway wire contract exactly.
 Response objects are parsed defensively: unknown fields are ignored and missing
-optional fields default to ``None``, so an additive gateway change (§28 commits to
-additive-only ``/v1`` changes) never breaks deserialization — mirroring the TS
+optional fields default to ``None``, so an additive gateway change (the ``/v1``
+contract is additive-only) never breaks deserialization — mirroring the TS
 SDK's no-runtime-validation stance.
 
 Request bodies (messages, tools, content parts, ``user``) are passed through as
@@ -22,7 +22,7 @@ from ._metadata import RateLimitInfo
 
 
 class EndUser(TypedDict, total=False):
-    """End-user identity forwarded with a request (§21.2 ``user``)."""
+    """End-user identity forwarded with a request (the ``user`` field)."""
 
     id: str
     plan: str
@@ -45,7 +45,7 @@ class ChatMessage(TypedDict, total=False):
 Messages = Sequence[Mapping[str, Any]]
 
 
-# --- Shared response value objects (§21.2) ----------------------------------
+# --- Shared response value objects -------------------------------------------
 
 
 def _as_int(value: object, default: int = 0) -> int:
@@ -54,7 +54,7 @@ def _as_int(value: object, default: int = 0) -> int:
 
 @dataclass
 class Usage:
-    """Token accounting for a request (§21.2)."""
+    """Token accounting for a request."""
 
     input_tokens: int = 0
     output_tokens: int = 0
@@ -77,7 +77,7 @@ class Usage:
 
 @dataclass
 class Cost:
-    """Estimated request cost (§21.2)."""
+    """Estimated request cost."""
 
     estimated_usd: float = 0.0
 
@@ -89,7 +89,7 @@ class Cost:
 
 @dataclass
 class GatewayInfo:
-    """Gateway routing metadata attached to a response (§21.2)."""
+    """Gateway routing metadata attached to a response."""
 
     fallback_used: bool = False
     retries: int = 0
@@ -106,7 +106,7 @@ class GatewayInfo:
 
 @dataclass
 class AssistantMessage:
-    """The assistant's reply message (§21.2)."""
+    """The assistant's reply message."""
 
     role: str = "assistant"
     #: Content parts, verbatim, e.g. ``[{"type": "text", "text": "..."}]``.
@@ -133,12 +133,12 @@ class AssistantMessage:
         )
 
 
-# --- Chat response (§21.2) --------------------------------------------------
+# --- Chat response -----------------------------------------------------------
 
 
 @dataclass
 class ChatResponse:
-    """A non-streaming ``POST /v1/chat`` response (§21.2)."""
+    """A non-streaming ``POST /v1/chat`` response."""
 
     id: Optional[str] = None
     model: Optional[str] = None
@@ -178,7 +178,7 @@ class ChatResponse:
         return self.message.text
 
 
-# --- Embeddings (§21.2) -----------------------------------------------------
+# --- Embeddings --------------------------------------------------------------
 
 
 @dataclass
@@ -197,7 +197,7 @@ class Embedding:
 
 @dataclass
 class EmbeddingsResponse:
-    """A ``POST /v1/embeddings`` response (§21.2)."""
+    """A ``POST /v1/embeddings`` response."""
 
     id: Optional[str] = None
     model: Optional[str] = None
@@ -230,12 +230,12 @@ class EmbeddingsResponse:
         )
 
 
-# --- Models (§21.2) ---------------------------------------------------------
+# --- Models ------------------------------------------------------------------
 
 
 @dataclass
 class Model:
-    """One entry in the ``GET /v1/models`` catalog (§21.2)."""
+    """One entry in the ``GET /v1/models`` catalog."""
 
     id: Optional[str] = None
     object: str = "model"
@@ -257,7 +257,7 @@ class Model:
 
 @dataclass
 class ModelsPage:
-    """The ``GET /v1/models`` catalog page (§21.2)."""
+    """The ``GET /v1/models`` catalog page."""
 
     object: str = "list"
     data: List[Model] = field(default_factory=list)
@@ -275,12 +275,12 @@ class ModelsPage:
         )
 
 
-# --- Client tokens (§21.2 / §18.1) ------------------------------------------
+# --- Client tokens -----------------------------------------------------------
 
 
 @dataclass
 class ClientToken:
-    """A minted short-lived client token (``POST /v1/client-tokens``, §18.1)."""
+    """A minted short-lived client token (``POST /v1/client-tokens``)."""
 
     #: The signed, short-lived client token (a JWT) — hand this to the end user's app.
     token: Optional[str] = None

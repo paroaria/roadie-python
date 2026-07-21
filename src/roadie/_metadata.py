@@ -1,5 +1,5 @@
 """Response metadata surfaced on every result: the ``X-Request-Id`` and the
-``X-RateLimit-*`` snapshot (plan §21.1). Mirrors the TS SDK's ``response-metadata.ts``.
+``X-RateLimit-*`` snapshot. Mirrors the TS SDK's ``response-metadata.ts``.
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ class Headers(Protocol):
 
 @dataclass(frozen=True)
 class RateLimitInfo:
-    """Snapshot from the ``X-RateLimit-*`` headers (§21.1)."""
+    """Snapshot from the ``X-RateLimit-*`` headers."""
 
     #: ``X-RateLimit-Limit`` — ceiling of the most-constrained window.
     limit: Optional[int] = None

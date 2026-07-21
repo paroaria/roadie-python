@@ -1,4 +1,4 @@
-"""The HTTP transport (plan §28): a single ``urllib``-based request path shared by
+"""The HTTP transport: a single ``urllib``-based request path shared by
 every resource. The Python mirror of the TS SDK's ``transport.ts`` + ``http.ts``.
 
 Responsibilities:
@@ -10,7 +10,7 @@ Responsibilities:
   ``408``, ``5xx``) with exponential backoff + jitter, honoring ``Retry-After``, up
   to ``max_retries``. The auto ``Idempotency-Key`` is generated once and reused
   across attempts, so a retried create is de-duplicated by the gateway.
-- Map a non-2xx §21.1 envelope to a typed error; surface ``X-Request-Id`` +
+- Map a non-2xx envelope to a typed error; surface ``X-Request-Id`` +
   ``X-RateLimit-*`` on every result via the caller.
 """
 
@@ -99,7 +99,7 @@ class HttpClient:
         idempotent: bool = False,
         timeout: Optional[float] = None,
     ) -> Tuple[Mapping[str, Any], Headers]:
-        """Non-streaming request → the parsed §21.2 body plus the response headers."""
+        """Non-streaming request → the parsed body plus the response headers."""
         idempotency_key = ulid() if idempotent else None
         headers = self._headers("application/json", has_body=body is not None, idempotency_key=idempotency_key)
         body_bytes = json.dumps(body).encode("utf-8") if body is not None else None

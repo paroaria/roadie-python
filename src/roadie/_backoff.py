@@ -1,6 +1,6 @@
 """Retry policy: which failures retry, and how long to wait (mirrors TS ``backoff.ts``).
 
-Only pre-first-byte, safe-to-repeat failures retry (§28): network errors plus
+Only pre-first-byte, safe-to-repeat failures retry: network errors plus
 ``429`` / ``408`` / ``5xx`` responses. Backoff is exponential with equal jitter,
 capped, and a ``Retry-After`` header (seconds or HTTP-date) always wins. Delays
 are expressed in SECONDS (idiomatic for :func:`time.sleep`).

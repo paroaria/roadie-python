@@ -1,9 +1,9 @@
-"""The :class:`Roadie` client (plan §28) — the server-side entry point.
+"""The :class:`Roadie` client — the server-side entry point.
 
     from roadie import Roadie
 
-    bp = Roadie(api_key=os.environ["ROADIE_KEY"])
-    res = bp.chat.create(model="smart", messages=[{"role": "user", "content": "Hi"}])
+    roadie = Roadie(api_key=os.environ["ROADIE_KEY"])
+    res = roadie.chat.create(model="smart", messages=[{"role": "user", "content": "Hi"}])
 
 The Python SDK is a BACKEND SDK: it authenticates with a secret key
 (``rd_sk_...``), which is safe in a trusted server environment. There is

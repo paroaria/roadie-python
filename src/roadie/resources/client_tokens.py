@@ -1,8 +1,8 @@
-"""``bp.client_tokens`` — server-side client-token minting (plan §18.1 / §21.2).
+"""``roadie.client_tokens`` — server-side client-token minting.
 
 A customer BACKEND (authenticated with a secret key) exchanges an end-user
 identity for a short-lived client token its app then uses to call the AI
-endpoints as that one end user — the §18.1 "Path A" backend mint.
+endpoints as that one end user — the "Path A" backend mint.
 
 This is the SERVER-SIDE counterpart of the TS SDK's ``federatedTokenProvider``
 (which does the browser/no-backend "Path B" exchange with a publishable key). The
@@ -35,10 +35,10 @@ class ClientTokensResource:
         """Mint a short-lived client token for one end user (``POST /v1/client-tokens``).
 
         Args:
-            end_user_id: The end user's stable external id in your system (§20.4).
+            end_user_id: The end user's stable external id in your system.
             plan: Optional plan tag for per-plan limits/budgets.
             attributes: Optional end-user attributes (JSON, ≤4 KB) persisted on first mint.
-            ttl_seconds: Requested token lifetime; the gateway clamps to ≤3600 (§18.1).
+            ttl_seconds: Requested token lifetime; the gateway clamps to ≤3600.
             scopes: Requested client-token scopes; omit for the default set.
         """
         end_user: dict[str, Any] = prune_none(

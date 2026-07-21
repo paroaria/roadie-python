@@ -7,9 +7,9 @@ dependencies (stdlib only). Mirrors the authoritative TypeScript SDK contract.
     import os
     from roadie import Roadie
 
-    bp = Roadie(api_key=os.environ["ROADIE_KEY"])
+    roadie = Roadie(api_key=os.environ["ROADIE_KEY"])
 
-    res = bp.chat.create(
+    res = roadie.chat.create(
         model="smart",
         messages=[{"role": "user", "content": "Summarize the news."}],
         user={"id": "u_123", "plan": "pro"},

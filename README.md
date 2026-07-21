@@ -28,9 +28,9 @@ pip install roadie-sdk
 import os
 from roadie import Roadie
 
-bp = Roadie(api_key=os.environ["ROADIE_KEY"])
+roadie = Roadie(api_key=os.environ["ROADIE_KEY"])
 
-res = bp.chat.create(
+res = roadie.chat.create(
     model="smart",
     messages=[{"role": "user", "content": "Summarize the news."}],
     user={"id": "u_123", "plan": "pro"},
@@ -42,7 +42,7 @@ print(res.usage, res.cost, res.request_id)
 ### Streaming
 
 ```python
-with bp.chat.stream(model="smart", messages=messages) as stream:
+with roadie.chat.stream(model="smart", messages=messages) as stream:
     for event in stream:
         if event.type == "content_delta":
             print(event["delta"], end="", flush=True)
@@ -52,13 +52,13 @@ with bp.chat.stream(model="smart", messages=messages) as stream:
 
 Frames are yielded verbatim as `StreamEvent` objects: `event.type` is the
 discriminator and fields are read with `event["delta"]` / `event.get("usage")`.
-NDJSON framing is available with `bp.chat.stream(..., framing="ndjson")`. Using
+NDJSON framing is available with `roadie.chat.stream(..., framing="ndjson")`. Using
 the stream as a context manager (or fully iterating it) releases the socket.
 
 ### Embeddings
 
 ```python
-res = bp.embeddings.create(model="smart-embed", input=["hello", "world"])
+res = roadie.embeddings.create(model="smart-embed", input=["hello", "world"])
 for row in res.data:
     print(row.index, len(row.embedding))
 ```
@@ -66,7 +66,7 @@ for row in res.data:
 ### Model catalog
 
 ```python
-for model in bp.models.list().data:
+for model in roadie.models.list().data:
     print(model.id, model.provider, model.capabilities)
 ```
 
@@ -76,7 +76,7 @@ Your backend exchanges an end-user identity for a short-lived client token its
 app then uses to call the AI endpoints as that one end user:
 
 ```python
-token = bp.client_tokens.create(
+token = roadie.client_tokens.create(
     end_user_id="u_123",
     plan="pro",
     ttl_seconds=600,           # gateway clamps to <= 3600
@@ -94,14 +94,14 @@ Every failure is a `RoadieError` subclass carrying `type`, `code`,
 from roadie import RateLimitError, is_roadie_error
 
 try:
-    bp.chat.create(model="smart", messages=messages)
+    roadie.chat.create(model="smart", messages=messages)
 except RateLimitError as err:
     print("retry after", err.retry_after)
 except RoadieError as err:
     print(err.type, err.code, err.request_id)
 ```
 
-Envelope-mapped classes (§21.1): `InvalidRequestError`, `AuthenticationError`,
+Envelope-mapped classes: `InvalidRequestError`, `AuthenticationError`,
 `PermissionError`, `NotFoundError`, `RateLimitError`, `QuotaError`,
 `BudgetError`, `ProviderError`, `IdempotencyError`, `InternalError`. Client-side:
 `APIConnectionError`, `APIConnectionTimeoutError`, `RoadieConfigurationError`.
@@ -130,11 +130,11 @@ status-based class while preserving the envelope's message/code/request id.
 | TypeScript                            | Python                                          |
 | ------------------------------------- | ----------------------------------------------- |
 | `new Roadie({ apiKey })`           | `Roadie(api_key=...)`                         |
-| `bp.chat.create(params)`              | `bp.chat.create(...)` → `ChatResponse`          |
-| `bp.chat.stream(params)`              | `bp.chat.stream(...)` → `ChatStream`            |
-| `bp.embeddings.create(params)`        | `bp.embeddings.create(...)` → `EmbeddingsResponse` |
-| _(not in TS SDK)_ `GET /v1/models`    | `bp.models.list()` → `ModelsPage`               |
-| `federatedTokenProvider` (Path B)     | `bp.client_tokens.create(...)` (Path A, server) |
+| `roadie.chat.create(params)`              | `roadie.chat.create(...)` → `ChatResponse`          |
+| `roadie.chat.stream(params)`              | `roadie.chat.stream(...)` → `ChatStream`            |
+| `roadie.embeddings.create(params)`        | `roadie.embeddings.create(...)` → `EmbeddingsResponse` |
+| _(not in TS SDK)_ `GET /v1/models`    | `roadie.models.list()` → `ModelsPage`               |
+| `federatedTokenProvider` (Path B)     | `roadie.client_tokens.create(...)` (Path A, server) |
 | `errorFromEnvelope` unknown-type safe | `error_from_envelope` unknown-type safe         |
 
 ## Design notes
@@ -147,7 +147,7 @@ status-based class while preserving the envelope's message/code/request id.
 - **Beta scope (deliberately deferred vs. the TS SDK):** async/`await` client;
   the browser-only secret-key guard and the client-app token cache/refresh
   (`TokenManager`) and federated Path-B provider (all client-app concerns — this is
-  a backend SDK); explicit request-cancellation signals; and `bp.feedback` (the
+  a backend SDK); explicit request-cancellation signals; and `roadie.feedback` (the
   gateway endpoint is later-wave). These are documented gaps, not oversights.
 
 ## Development

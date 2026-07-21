@@ -12,7 +12,7 @@ from .._metadata import Headers, parse_rate_limit, request_id_from
 
 @dataclass(frozen=True)
 class IdentityDefaults:
-    """Client-level identity defaults applied when a call omits them (§28)."""
+    """Client-level identity defaults applied when a call omits them."""
 
     user: Optional[Mapping[str, Any]] = None
     metadata: Optional[Mapping[str, str]] = None

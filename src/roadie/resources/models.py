@@ -1,4 +1,4 @@
-"""``bp.models`` — the model catalog (plan §21.2).
+"""``roadie.models`` — the model catalog.
 
 :meth:`ModelsResource.list` issues ``GET /v1/models`` and returns the catalog this
 credential may use, narrowed by the credential's restrictions, each entry carrying

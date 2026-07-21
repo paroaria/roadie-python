@@ -1,5 +1,5 @@
 """ULID generation for the auto ``Idempotency-Key`` on non-streaming create calls
-(§21.1) — mirrors the TS ``idempotency.ts``.
+— mirrors the TS ``idempotency.ts``.
 
 A ULID is 128 bits (48-bit millisecond timestamp + 80 bits of randomness),
 Crockford-base32 encoded to 26 characters. Uniqueness (not cryptographic

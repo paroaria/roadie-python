@@ -1,4 +1,4 @@
-"""Incremental stream-frame decoders + the ``ChatStream`` iterable (plan §16.1).
+"""Incremental stream-frame decoders + the ``ChatStream`` iterable.
 
 Mirrors the TS SDK's ``decoders.ts`` / ``chat-stream.ts``. Both decoders accept
 raw byte chunks in the arbitrary boundaries the network delivers them — mid-frame,
@@ -48,7 +48,7 @@ def _strip_cr(line: str) -> str:
 
 
 class SSEDecoder:
-    """Server-Sent Events decoder (§16.1).
+    """Server-Sent Events decoder.
 
     Accumulates ``data:`` field values within an event and dispatches on the
     blank-line separator (per the SSE spec); ``:`` lines are comments (heartbeats)
@@ -123,7 +123,7 @@ class SSEDecoder:
 
 
 class NDJSONDecoder:
-    """Newline-delimited JSON decoder (§16.1).
+    """Newline-delimited JSON decoder.
 
     Each non-empty line is one frame; blank lines (NDJSON heartbeats) are skipped.
     EOF is the terminal signal, so there is no ``[DONE]`` sentinel.
@@ -167,7 +167,7 @@ class NDJSONDecoder:
 
 
 class StreamEvent:
-    """One decoded stream frame (§16.1) — a typed chunk object.
+    """One decoded stream frame — a typed chunk object.
 
     Frames intentionally mix casing on the wire (``content_delta`` carries
     ``delta``; ``message_end`` carries snake_case ``finish_reason`` / ``usage`` /
@@ -215,7 +215,7 @@ class StreamConnection:
 
 
 class ChatStream:
-    """The iterable returned (without connecting) by ``bp.chat.stream(...)``.
+    """The iterable returned (without connecting) by ``roadie.chat.stream(...)``.
 
     The HTTP connection is established LAZILY on the first iteration, so the method
     returns an iterable immediately. It reads the SSE/NDJSON body incrementally,
@@ -226,7 +226,7 @@ class ChatStream:
     Use it directly in a ``for`` loop, or as a context manager to guarantee the
     socket is released even on early ``break``::
 
-        with bp.chat.stream(model="smart", messages=msgs) as stream:
+        with roadie.chat.stream(model="smart", messages=msgs) as stream:
             for event in stream:
                 ...
     """

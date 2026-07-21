@@ -1,5 +1,5 @@
 """Streaming: SSE/NDJSON decoders (incl. split + oversized-line safety) and the
-end-to-end ``bp.chat.stream`` iterable."""
+end-to-end ``roadie.chat.stream`` iterable."""
 
 from __future__ import annotations
 

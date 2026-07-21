@@ -1,7 +1,7 @@
-"""Typed error hierarchy (plan §21.1) — the Python mirror of the TS SDK's ``errors.ts``.
+"""Typed error hierarchy — the Python mirror of the TS SDK's ``errors.ts``.
 
 Every failure the SDK raises is a :class:`RoadieError`. Server failures are
-mapped from the uniform §21.1 error envelope onto one class per ``type``, each
+mapped from the uniform error envelope onto one class per ``type``, each
 carrying ``code``, ``request_id`` (from ``X-Request-Id``), ``status`` and the
 message; client-side failures (network, timeout, misconfiguration) get their own
 classes so callers can branch on ``except``.
@@ -34,7 +34,7 @@ __all__ = [
 class RoadieError(Exception):
     """Base class for every error the SDK raises."""
 
-    #: Discriminator: a §21.1 envelope type, or a client-side type
+    #: Discriminator: an envelope type, or a client-side type
     #: (``connection_error`` / ``timeout_error`` / ``configuration_error``).
     type: str
 
@@ -55,13 +55,13 @@ class RoadieError(Exception):
         self.message = message
         #: HTTP status of the response that produced the error (absent for client-side errors).
         self.status = status
-        #: Stable machine-readable §21.1 ``code``.
+        #: Stable machine-readable ``code``.
         self.code = code
         #: ``X-Request-Id`` of the failing request, when known.
         self.request_id = request_id
-        #: Offending request parameter (§21.1 ``param``).
+        #: Offending request parameter (``param``).
         self.param = param
-        #: Documentation URL for this error (§21.1 ``doc_url``).
+        #: Documentation URL for this error (``doc_url``).
         self.doc_url = doc_url
         #: Seconds to wait before retrying (from the ``Retry-After`` header).
         self.retry_after = retry_after
@@ -72,7 +72,7 @@ def is_roadie_error(value: object) -> bool:
     return isinstance(value, RoadieError)
 
 
-# --- Envelope-mapped server errors (§21.1) ----------------------------------
+# --- Envelope-mapped server errors -------------------------------------------
 
 
 class InvalidRequestError(RoadieError):
@@ -208,7 +208,7 @@ def error_from_envelope(
 ) -> RoadieError:
     """Build the typed error for a non-2xx response.
 
-    Prefers the §21.1 envelope's ``type``; falls back to the HTTP status when the
+    Prefers the envelope's ``type``; falls back to the HTTP status when the
     body is missing or malformed. An UNRECOGNIZED envelope ``type`` (a future 11th
     gateway error type, or a malformed empty string) still yields a
     :class:`RoadieError` — never a ``KeyError`` — by falling back to the

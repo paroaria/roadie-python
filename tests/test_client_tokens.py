@@ -1,4 +1,4 @@
-"""Client-token minting (server-side, secret key — §18.1 Path A)."""
+"""Client-token minting (server-side, secret key — Path A)."""
 
 from __future__ import annotations
 

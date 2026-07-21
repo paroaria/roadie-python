@@ -1,4 +1,4 @@
-"""``bp.embeddings`` — the unified embeddings surface (plan §21.2).
+"""``roadie.embeddings`` — the unified embeddings surface.
 
 :meth:`EmbeddingsResource.create` issues a non-streaming ``POST /v1/embeddings``
 (auto ``Idempotency-Key``, retried on transient failures) and returns the typed
